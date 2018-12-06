@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse, JsonResponse
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -19,15 +19,15 @@ def snippet_list(request):
     serializer = SnippetSerializer(data=data)
     if serializer.is_valid():
       serializer.save()
-      return Response(serializer.data, status=201)
-    return Response(serializer.errors, status=400)
+      return Response(serializer.data, status.HTTP_201_CREATED)
+    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def snippet_detail(request, pk):
   try:
     snippet = Snippet.objects.get(pk=pk)
   except Snippet.DoesNotExist:
-    return Response(status=404)
+    return Response(status.HTTP_404_NOT_FOUND)
 
   if request.method == 'GET':
     serializer = SnippetSerializer(snippet)
@@ -39,7 +39,8 @@ def snippet_detail(request, pk):
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data)
+    return Response(status.HTTP_400_BAD_REQUEST)
 
   elif request.method == 'DELETE':
     snippet.delete()
-    return Response(status=204)
+    return Response(status.HTTP_204_NO_CONTENT)
