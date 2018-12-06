@@ -2,13 +2,13 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from .models import Snippet
 from .serializers import SnippetSerializer
 
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def snippet_list(request):
   if request.method == 'GET':
     snippets = Snippet.objects.all()
@@ -22,7 +22,7 @@ def snippet_list(request):
       return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
-@csrf_exempt
+@api_view(['GET', 'PUT', 'DELETE'])
 def snippet_detail(request, pk):
   try:
     snippet = Snippet.objects.get(pk=pk)
