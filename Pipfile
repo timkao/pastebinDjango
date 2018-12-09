@@ -8,6 +8,8 @@ django = "*"
 djangorestframework = "*"
 pygments = "*"
 httpie = "*"
+coreapi = "==2.3.3"
+pyyaml = "*"
 
 [dev-packages]
 
