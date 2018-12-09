@@ -19,7 +19,9 @@ class Snippet(models.Model):
   language = models.CharField(max_length=100, default='python', choices=LANGUAGE_CHOICES)
   style = models.CharField(choices=STYLE_CHOICES, default='friendly', max_length=100)
 
+  # This line created "snippets" field in user model
   owner = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE)
+
   highlighted = models.TextField()
 
   class Meta:
